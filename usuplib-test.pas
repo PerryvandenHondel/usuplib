@@ -6,5 +6,5 @@ uses
 
 
 begin   
-  
+    WriteLn('Your new password is ', GeneratePassword());
 end. // of program USupLibTest;
