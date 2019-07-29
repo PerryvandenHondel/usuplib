@@ -27,7 +27,7 @@ function GeneratePassword(): String;                        // Generate a new pa
 
 
 // File and Folder functions
-procedure CopyTheFile(fnSource, fnDest: AnsiString);
+procedure CopyTheFile(fnSource, fnDest: AnsiString);		// Copy file from source to dest.
 
 
 implementation
