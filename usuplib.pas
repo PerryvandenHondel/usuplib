@@ -15,24 +15,60 @@ unit USupLib;
 interface
 
 
-
-// Generic functions
-function GeneratePassword(): String;                        // Generate a new password in format AAAAbbbb9999!
-
 // Text functions
 function EncloseDoubleQuote(const s: string): string;       // Enclose a string with double quotes (")
 function EncloseSingleQuote(const s: string): string;       // Enclose a string with single quotes (')
+function CountOccurences(const SubText: string; const Text: string): Integer;
+															// Count the number of a subText in text
 
 // Micelanious functions
 function ReadSettingKey(path: AnsiString; section: AnsiString; key: AnsiString): AnsiString;
+function GeneratePassword(): String;                        // Generate a new password in format AAAAbbbb9999!
+
+
+// File and Folder functions
+procedure CopyTheFile(fnSource, fnDest: AnsiString);
 
 
 implementation
 
 
 uses
+	Classes,			// For TFileSteam
 	sysutils,
 	utextfile;
+
+
+function CountOccurences( const SubText: string; const Text: string): Integer;
+//
+// https://stackoverflow.com/questions/15294501/how-to-count-number-of-occurrences-of-a-certain-char-in-string
+//
+begin
+  Result := Pos(SubText, Text); 
+  if Result > 0 then
+    Result := (Length(Text) - Length(StringReplace(Text, SubText, '', [rfReplaceAll]))) div  Length(subtext);
+end;  { CountOccurences }
+
+
+procedure CopyTheFile(fnSource, fnDest: AnsiString);
+//
+// Copy a file 
+//
+//		fnSource		Full path of the source
+//		fnDest			Full path to the dest.
+//
+var
+    SourceF, DestF: TFileStream;
+begin
+    SourceF := TFileStream.Create(fnSource, fmOpenRead);
+    DestF := TFileStream.Create(fnDest, fmCreate);
+
+    DestF.CopyFrom(SourceF, SourceF.Size);
+    
+    SourceF.Free;
+    DestF.Free;
+end; // of procedure CopyTheFile()
+
 
 
 function GeneratePassword(): String;
