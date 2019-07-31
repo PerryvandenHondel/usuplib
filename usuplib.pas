@@ -32,6 +32,8 @@ function GetCurrentDateTimeMicro(): AnsiString;				// Returns the current date t
 // Micelanious functions
 function ReadSettingKey(path: AnsiString; section: AnsiString; key: AnsiString): AnsiString;
 function GeneratePassword(): String;                        // Generate a new password in format AAAAbbbb9999!
+function GetCurrentUser(): AnsiString;						// Get the current user name under Linux
+
 
 
 // File and Folder functions
@@ -46,6 +48,35 @@ uses
 	Classes,			// For TFileSteam
 	sysutils,
 	utextfile;
+
+
+function GetCurrentUser(): AnsiString;
+//
+// Get the current user on a Linux system.
+//
+// Reference: https://forum.lazarus.freepascal.org/index.php?topic=4474.0
+//
+var
+	i: Integer;
+    es: AnsiString;
+    r: AnsiString;
+    p: Integer;
+    s: AnsiString;
+begin
+    s := 'USER=';
+
+    for i := 0 to 80 do
+    begin
+        es := SysUtils.getEnvironmentString(i);
+        p := Pos(s, es); 
+        If p > 0 then
+        begin
+            r := RightStr(es, Length(es) - Length(s));
+            Exit(r)
+        end; // of if
+
+    end; // end for
+end; // of function GetCurrentUser()
 
 
 function GetCurrentDateTimeMicro(): AnsiString;
