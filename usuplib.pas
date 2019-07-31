@@ -20,6 +20,8 @@ function EncloseDoubleQuote(const s: string): string;       // Enclose a string 
 function EncloseSingleQuote(const s: string): string;       // Enclose a string with single quotes (')
 function CountOccurences(const SubText: string; const Text: string): Integer;
 															// Count the number of a subText in text
+function LastCharPos(const S: string; const Chr: char): integer;
+															// Find the last position of chr in s
 
 // Micelanious functions
 function ReadSettingKey(path: AnsiString; section: AnsiString; key: AnsiString): AnsiString;
@@ -145,6 +147,24 @@ begin
 
 	EncloseSingleQuote := r;
 end; // of function EncloseSingleQuote
+
+
+function LastCharPos(const S: string; const Chr: char): integer;
+//
+// Return the position of chr in s.
+//
+// https://stackoverflow.com/questions/5844406/find-the-last-occurrence-of-char-in-a-string 
+//
+var
+	i: Integer;
+begin	
+	result := 0;
+	
+	for i := length(S) downto 1 do
+    	if S[i] = Chr then
+      		Exit(i); // Delphi 2009+ code (Exit with value)
+end; // of LastCharPos()
+
 
 
 function ReadSettingKey(path: AnsiString; section: AnsiString; key: AnsiString): AnsiString;
