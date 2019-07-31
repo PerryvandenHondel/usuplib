@@ -22,6 +22,12 @@ function CountOccurences(const SubText: string; const Text: string): Integer;
 															// Count the number of a subText in text
 function LastCharPos(const S: string; const Chr: char): integer;
 															// Find the last position of chr in s
+function NumberAlign(v: integer; l: byte): string;			// Align a Number on length l, return as string.
+
+
+// Date and time functions
+function GetCurrentDateTimeMicro(): AnsiString;				// Returns the current date time in format YYYY-MM-DD HH:MM:SS.SSS
+
 
 // Micelanious functions
 function ReadSettingKey(path: AnsiString; section: AnsiString; key: AnsiString): AnsiString;
@@ -36,9 +42,51 @@ implementation
 
 
 uses
+	Dos,
 	Classes,			// For TFileSteam
 	sysutils,
 	utextfile;
+
+
+function GetCurrentDateTimeMicro(): AnsiString;
+//
+// Returns the current date time in format YYYY-MM-DD HH:MM:SS.SSS
+//
+var
+	Yr: Word;
+	Md: Word;
+	Dy: Word;
+	Dow: Word;
+	Hr: Word;
+	Mn: Word; // Minutes, conflicts with
+	Sc: Word;
+	S100: Word;
+begin
+	GetDate(Yr, Md, Dy, Dow);
+	GetTime(Hr, Mn, Sc, S100);
+	result := NumberAlign(Yr, 4) + '-' + 
+        NumberAlign(Md, 2) + '-' + 
+        NumberAlign(Dy, 2) + ' ' + 
+        NumberAlign(Hr, 2) + ':' + 
+        NumberAlign(Mn, 2) + ':' + 
+        NumberAlign(Sc, 2) + '.' + 
+        NumberAlign(S100, 3);
+end; // of function GetCurrentDateTimeMicro
+
+
+function NumberAlign(v: integer; l: byte): string;
+//
+// 
+//  Returns a number v aligned on l chars
+// 
+//
+var
+	buff: string;
+begin
+	buff := StringOfChar('0', l) + IntToStr(v);
+	NumberAlign := RightStr(buff, l);
+end; // of function NumberAlign
+
 
 
 function CountOccurences( const SubText: string; const Text: string): Integer;
