@@ -18,11 +18,10 @@ interface
 // Text functions
 function EncloseDoubleQuote(const s: string): string;       // Enclose a string with double quotes (")
 function EncloseSingleQuote(const s: string): string;       // Enclose a string with single quotes (')
-function CountOccurences(const SubText: string; const Text: string): Integer;
-															// Count the number of a subText in text
-function LastCharPos(const S: string; const Chr: char): integer;
-															// Find the last position of chr in s
+function CountOccurences(const SubText: string; const Text: string): Integer; // Count the number of a subText in text
+function LastCharPos(const S: string; const Chr: char): integer; // Find the last position of chr in s
 function NumberAlign(v: integer; l: byte): string;			// Align a Number on length l, return as string.
+function Occurs(str: AnsiString; separator: string): integer; // Count the number of a char in a string.
 
 
 // Date and time functions
@@ -301,6 +300,29 @@ begin
 	conf.CloseFile();
 	ReadSettingKey := r;
 end; // of function ReadSettingKey
+
+
+function Occurs(str: AnsiString; separator: string): integer;
+//
+//   Count the number of separator chars in str
+//
+var
+	i : Integer;
+	nSep : integer;
+begin
+	//WriteLn('Occurs()', chr(9), str);
+	//WriteLn('Occurs()', chr(9), Length(str));
+	//WriteLn('Occurs()', chr(9), 'length=', str[0]);
+	nSep := 0;
+	
+	for i:= 1 to Length(str) do
+	begin
+		if str[i] = separator then 
+			Inc(nSep);
+	end;
+	//WriteLn('Occurs()', chr(9), 'nSep=', nSep);
+	Occurs:= nSep;
+end; // of function Occurs
 
 
 end. // of unit usuplib
