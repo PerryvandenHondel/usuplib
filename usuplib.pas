@@ -15,6 +15,10 @@ unit USupLib;
 interface
 
 
+type
+	TStringArray = array of string;
+
+
 // Text functions
 function EncloseDoubleQuote(const s: string): string;       // Enclose a string with double quotes (")
 function EncloseSingleQuote(const s: string): string;       // Enclose a string with single quotes (')
@@ -22,7 +26,7 @@ function CountOccurences(const SubText: string; const Text: string): Integer; //
 function LastCharPos(const S: string; const Chr: char): integer; // Find the last position of chr in s
 function NumberAlign(v: integer; l: byte): string;			// Align a Number on length l, return as string.
 function Occurs(str: AnsiString; separator: string): integer; // Count the number of a char in a string.
-
+function SplitString(str: AnsiString; sep: string): TStringArray;
 
 // Date and time functions
 function GetCurrentDateTimeMicro(): AnsiString;				// Returns the current date time in format YYYY-MM-DD HH:MM:SS.SSS
@@ -45,7 +49,8 @@ implementation
 uses
 	Dos,
 	Classes,			// For TFileSteam
-	sysutils,
+	SysUtils,			// For IntToStr()
+	StrUtils,
 	utextfile;
 
 
@@ -325,4 +330,68 @@ begin
 end; // of function Occurs
 
 
+function SplitString(str: AnsiString; sep: string): TStringArray;
+//
+//
+// Split a string into an array
+//  
+//  Variables:
+//    str     String with text separated by sep
+//    sep     The separator char
+//  
+//  Returns:
+//    An TStringArray
+// 
+//  Usage:
+//  
+//   var
+//     a	: TStringArray;   // declare the array a
+//    
+//   begin
+//      SetLength(a, 0);    // initialize array a
+//      a := SplitString('part1;part2;part3;partofom4;p5;partie6;paty7', ';');
+//      for x := 0 to High(a) do 
+//      begin
+//        // For every part of the array print it
+//        WriteLn(IntToStr(x) + ': ' + a[x]);
+//      end;
+//      SetLength(a, 0)     // Clear the memory used
+//
+var
+	n : integer;
+	i : integer;
+	line : AnsiString;
+	field : AnsiString;
+begin
+	//Writeln('SplitString()');
+	//WriteLn('str=' + str);
+	
+	n := Occurs(str, sep);
+	
+	//SetLength(SplitString, n);
+	SetLength(SplitString, n + 1); // Old
+	//WriteLn('high=' + IntToStr(High(SplitString)));
+	//WriteLn('n=' + IntToStr(n));
+	i := 0;
+	line := str;
+	repeat
+		if Pos(sep, line) > 0 then
+		begin
+			field := Copy(line, 1, Pos(sep, line) - 1);
+			line := Copy(line, Pos(sep, line) + 1, Length(line) - Pos(sep, line));
+		end
+		else
+		begin
+			field := line;
+			line := '';
+		end;
+		//WriteLn(IntTostr(i) + ': ' + field);
+		//'WriteLn('line=' + line);
+		SplitString[i] := field;
+		Inc(i)
+	until line = '';
+end; // function SplitString
+
+
 end. // of unit usuplib
+
