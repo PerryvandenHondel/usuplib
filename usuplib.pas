@@ -15,6 +15,14 @@ unit USupLib;
 interface
 
 
+const
+	CHAR_TAB = #9;			// Tab
+	CHAR_LF = #10;			// Line feed
+	CHAR_CR = #13;			// Carrage return
+	CHAR_LFCR = #10#13;		// Line feed + carrage return
+	CHAR_SPACE = #32;	 	// Space
+	
+
 type
 	TStringArray = array of string;
 
