@@ -36,6 +36,7 @@ function GetCurrentDateTimeMicro(): AnsiString;				// Returns the current date t
 function ReadSettingKey(path: AnsiString; section: AnsiString; key: AnsiString): AnsiString;
 function GeneratePassword(): String;                        // Generate a new password in format AAAAbbbb9999!
 function GetCurrentUser(): AnsiString;						// Get the current user name under Linux
+function GetConfigPath(): AnsiString;						// Returns the config name for the program. /dir/dir/progname.conf
 
 
 
@@ -52,6 +53,16 @@ uses
 	SysUtils,			// For IntToStr()
 	StrUtils,
 	utextfile;
+
+
+function GetConfigPath(): AnsiString;
+{
+    Get the path to the config file.
+	Format:  /dir/dir/progname.conf
+}
+begin
+    GetConfigPath := ParamStr(0) + '.conf';
+end; { of function GetConfigPath() }
 
 
 function GetCurrentUser(): AnsiString;
