@@ -164,10 +164,17 @@ procedure CopyTheFile(fnSource, fnDest: AnsiString);
 var
     SourceF, DestF: TFileStream;
 begin
+	//Writeln('CopyTheFile() ' + fnSource + ' > ' + fnDest);
     SourceF := TFileStream.Create(fnSource, fmOpenRead);
     DestF := TFileStream.Create(fnDest, fmCreate);
-
-    DestF.CopyFrom(SourceF, SourceF.Size);
+    
+	try
+  		// code that might generate an exception
+  		DestF.CopyFrom(SourceF, SourceF.Size);
+	except
+  	on E: Exception do
+    	WriteLn('USUPLIB CopyTheFile() ' + 'Error: '+ E.ClassName + #13#10 + E.Message);
+	end;
     
     SourceF.Free;
     DestF.Free;
