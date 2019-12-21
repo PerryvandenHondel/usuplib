@@ -1,6 +1,7 @@
 unit USupLib;
 
 
+
 //
 // Pascal Unit Support Library (USupLib)
 //
@@ -8,11 +9,14 @@ unit USupLib;
 //
 
 
+
 {$mode objfpc}
 {$H+}
 
 
+
 interface
+
 
 
 const
@@ -21,10 +25,12 @@ const
 	CHAR_CR = #13;			// Carrage return
 	CHAR_LFCR = #10#13;		// Line feed + carrage return
 	CHAR_SPACE = #32;	 	// Space
-	
+
+
 
 type
 	TStringArray = array of string;
+
 
 
 // Text functions
@@ -35,9 +41,13 @@ function LastCharPos(const S: string; const Chr: char): integer; // Find the las
 function NumberAlign(v: integer; l: byte): string;			// Align a Number on length l, return as string.
 function Occurs(str: AnsiString; separator: string): integer; // Count the number of a char in a string.
 function SplitString(str: AnsiString; sep: string): TStringArray;
+function RandomString(StringLen: Integer): Ansistring;
+
+
 
 // Date and time functions
 function GetCurrentDateTimeMicro(): AnsiString;				// Returns the current date time in format YYYY-MM-DD HH:MM:SS.SSS
+
 
 
 // Micelanious functions
@@ -52,7 +62,9 @@ function GetConfigPath(): AnsiString;						// Returns the config name for the pr
 procedure CopyTheFile(fnSource, fnDest: AnsiString);		// Copy file from source to dest.
 
 
+
 implementation
+
 
 
 uses
@@ -61,6 +73,26 @@ uses
 	SysUtils,			// For IntToStr()
 	StrUtils,
 	utextfile;
+
+
+
+function RandomString(StringLen: Integer): Ansistring;
+{
+	Generate a string with chars from str of length StringLen
+	Source: https://www.reddit.com/r/pascal/comments/3u0ges/how_to_generate_a_random_series_of_letters_in/
+} 
+var  
+	str: Ansistring; 
+begin 
+    Randomize; 
+    // String with all possible chars 
+    str := 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'; 
+    Result := ''; 
+    repeat 
+        Result := Result + str[Random(Length(str)) + 1]; 
+    until (Length(Result) = StringLen); 
+end; { of function RandomString() }
+
 
 
 function GetConfigPath(): AnsiString;
@@ -297,8 +329,8 @@ var
 	l: string;					// Line buffer
 	conf: CTextFile;			// Class Text File 
 begin
-	conf := CTextFile.Create(path);
-	conf.OpenFileRead();
+	conf := CTextFile.CreateTheFile(path);
+	conf.OpenFileForRead();
 
 	r := '';
 	sectionName := '['+ section + ']';
@@ -328,7 +360,7 @@ begin
 		end; // of if inSection
 		
 	until conf.GetEof();
-	conf.CloseFile();
+	conf.CloseTheFile();
 	ReadSettingKey := r;
 end; // of function ReadSettingKey
 
